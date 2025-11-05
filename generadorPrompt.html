@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>GENERADOR DE PROMPT</title>
+	<meta name="author" content="Dr. Eduardo Aguirre Caracheo">
+</head>
+<body>
+
+	<div class="contenedor">
+
+		<h1>GENERADOR DE PROMPT PARA EVALUACIÓN</h1>
+		<p style="margin-bottom: 20px;">Bienvenido a este generador de prompts para realizar estrategias <br>e instrumentos de evaluación para utilizarse con la IA generativa.<br><br> Completa los siguientes campos para continuar</p>
+
+	
+
+		<div class="formulario">
+				<input type="text" id="rol" placeholder="Rol para el prompt">
+				<input type="text" id="nombreAsignatura" placeholder="Nombre de tu materia">
+				<input type="text" id="nombreUnidad" placeholder="Nombre de la unidad">
+				<textarea id="objetivosUnidad" placeholder="Objetivos de la unidad"></textarea>
+				
+				<select id="tipoEvaluacion">
+					<option>Tipo evaluación...</option>
+					<option>Sumativa</option>
+					<option>Formativa</option>
+					<option>Diagnóstica</option>
+				</select>
+				<input type="text" id="tema" placeholder="Tema de la evaluación">
+				<input type="text" id="competenciasUnidad" placeholder="Competencias (opcional)">
+				<textarea id="masContexto" placeholder="Más contexto para el prompt como: nivel educativo, modalidad, recursos, tiempo disponible, número de estudiantes(opcional)"></textarea>
+				<select id="evaluacion">
+					<option>Incluir evaluación</option>
+					<option>No inlcuir evaluación</option>
+				</select>
+				<button onclick="generarPrompt()">GENERAR PROMPT</button>
+		</div>
+
+		<div class="prompt">
+			<textarea id="prompt" placeholder="Tu prompt aparecerá en este espacio"></textarea>
+			<div class="tooltip">
+				<button onclick="copiar()" id="copy">
+				C
+				</button>
+			</div>
+
+		</div>
+
+	</div>
+
+	<footer>
+		<p>Herramienta desarrollada por el Cuerpo Académico Innovación y Desarrollo de Tecnología Didáctica de la Faculad de Informática</p>
+	</footer>
+
+	<script type="text/javascript">
+		function generarPrompt(){
+			let rol = document.getElementById('rol').value;
+			let nombreAsignatura = document.getElementById('nombreAsignatura').value;
+			let nombreUnidad = document.getElementById('nombreUnidad').value;
+			let objetivosUnidad = document.getElementById('objetivosUnidad').value;
+			let competenciasUnidad = document.getElementById('competenciasUnidad').value;
+			let tipoEvaluacion = document.getElementById('tipoEvaluacion').value;
+			let tema = document.getElementById('tema').value;
+			let masContexto = document.getElementById('masContexto').value;
+			let evaluacion = document.getElementById('evaluacion').value;
+
+			
+			
+
+			let	textoPrompt = "Eres un "+rol+" en la asignatura '"+nombreAsignatura+"'.\n\n"+
+							"Debes diseñar una actividad de evaluación "+tipoEvaluacion+" para el tema "+tema+
+							", perteneciente a la unidad "+nombreUnidad+".\n\n"+
+
+							"El propósito es evaluar el logro del objetivo: "+objetivosUnidad;
+
+			if (competenciasUnidad!="") {
+				textoPrompt+="\n\nLas competencias a desarrollar son: "+competenciasUnidad;
+			}
+
+			if (masContexto!="") {
+				textoPrompt+="\n\nAdemás, considera el siguiente contexto educativo:"+masContexto
+			}
+
+			textoPrompt+="\n\nTu propuesta debe incluir:\n* Título de la actividad.\n* Objetivo de la actividad.\n* Instrucciones para el estudiante.\n* Estrategia didáctica o metodología empleada, indicando el nivel de la Taxonomía de Bloom que aborda (por ejemplo: recordar, aplicar, analizar, crear) de acuerdo con el objetivo.\n* Una breve justificación de cómo la estrategia y la actividad se alinean con el objetivo y las competencias.\n"
+
+			if(evaluacion == "Incluir evaluación"){
+				textoPrompt+="\n\nDiseña el instrumento de evaluación más adecuado de acuerdo con el tipo de estrategia de aprendizaje propuesta (por ejemplo: rúbrica, lista de cotejo, escala de valoración, guía de observación, etc.).\n\nIncluye:\n\nTipo de instrumento seleccionado y justificación de su pertinencia.\nCriterios de evaluación, derivados del objetivo y las competencias.\nIndicadores de desempeño o evidencias observables por criterio.\nNiveles de logro o escala de valoración (por ejemplo: excelente, satisfactorio, en proceso, insuficiente).\nDescripción clara y medible de cada nivel."
+			}
+			
+
+			document.getElementById('prompt').value = textoPrompt
+
+		}
+
+		function copiar(){
+			var copyText = document.getElementById("prompt").value;
+
+			navigator.clipboard.writeText(copyText);
+
+			alert("Texto copiado");
+
+		}
+
+		
+	</script>
+
+
+	<style type="text/css">
+
+		*{
+			-webkit-font-smoothing: antialiased;
+			font-family: ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol;
+			background-color: #212121;
+		}
+
+		.actividad{
+			float: left;
+			width: 1000px;
+			height: 50px;
+			margin-bottom: 10px;
+		}
+
+		.tab1{
+			width: 250px;
+			float: left;
+			text-align: center;
+			height: 50px;
+			line-height: 50px;
+			opacity: .2;
+			background-color: #181818;
+			border-radius: 25px;
+			margin-left: 245px;
+			cursor: pointer;
+		}
+
+		.tab2{
+			width: 250px;
+			float: left;
+			text-align: center;
+			height: 50px;
+			line-height: 50px;
+			opacity: .2;
+			background-color: #181818;
+			border-radius: 25px;
+			margin-left: 10px;
+			cursor: pointer;
+		}
+
+		.active{
+			font-weight: bold;
+			opacity: 1;
+		}
+
+		.contenedor{
+			width: 1000px;
+			position: absolute;
+			left: calc(50% - 500px);
+			top: 80px;
+			text-align: center;
+			color: white;
+		}
+
+		.formulario{
+			float: left;
+			width: 50%;
+		}
+		input, select, textarea{
+			background-color: #303030;
+			padding: 10px;
+			box-sizing: border-box;
+			height: 46px;
+			border-radius: 23px;
+			font-family: ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol;
+			width: 90%;
+			float: left;
+			clear: both;
+			font-size: 1rem;
+			color: white;
+			outline: none;
+			border:none;
+			margin-bottom:10px;
+			margin-left: 5%;
+		}
+
+		button{
+			background-color: #181818;
+			padding: 10px;
+			box-sizing: border-box;
+			height: 46px;
+			border-radius: 23px;
+			font-family: ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol;
+			width: 90%;
+			float: left;
+			clear: both;
+			font-size: 1rem;
+			color: white;
+			outline: none;
+			border:none;
+			margin-bottom:10px;
+			margin-left: 5%;
+		}
+
+		textarea{
+			height: 92px;
+			resize: none;
+		}
+
+		.prompt{
+			height: 100px;
+			float: left;
+			width: 50%;
+			text-align: left;
+			overflow-y: scroll;
+			height: 500px;
+		}
+
+		#prompt{
+			height: 400px;
+		}
+
+		#copy{
+			width: 46px;
+			float: right;
+			margin-right: 25px;
+		}
+
+		footer{
+			position: absolute;
+			bottom: 10px;
+			height: 40px;
+			color: white;
+			opacity: .4;
+			width: 100%;
+			text-align: center;
+			font-size: .8em;
+		}
+
+		tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+	</style>
+
+</body>
+</html>
